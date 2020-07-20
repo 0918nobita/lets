@@ -1,4 +1,5 @@
 use std::env;
+use std::fmt::Display;
 use std::fs::{self, File};
 use std::io::{self, Write};
 use std::process::Command;
@@ -9,16 +10,18 @@ fn main() -> io::Result<()> {
 
     let mut s = String::from("hello");
     change(&mut s);
-    println!("{}", s);
+    println!("{}", s); // => hello, world
 
     let word = first_word(&s);
-    println!("{}", word);
+    println!("[{}]", word); // => [hello,]
 
     let num_list = vec![34, 50, 25, 100, 65];
-    println!("The largest number is {}", largest(&num_list));
+    println!("The largest number is {}", largest(&num_list)); // => 100
 
     let char_list = vec!['y', 'm', 'a', 'q'];
-    println!("The largest char is {}", largest(&char_list));
+    println!("The largest char is {}", largest(&char_list)); // => y
+
+    println!("{}", longest_with_an_announcement("abc", "xy", "foo")); // => Announcement! foo abc
 
     fs::create_dir_all("./.lets-cache")?;
 
@@ -60,4 +63,16 @@ fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     }
 
     largest
+}
+
+fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement! {}", ann);
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
 }
